@@ -1,4 +1,3 @@
-import pytest
 from app.schemas.user import UserRegisterRequest, UserLoginRequest
 from app.models.user import UserModel
 from fastapi.testclient import TestClient
@@ -26,6 +25,11 @@ def test_register_user(client: TestClient, db_session):
     user_in_db = db_session.query(UserModel).filter_by(email=user_data["email"]).first()
     assert user_in_db is not None
 
+    # Verifica se o cookie refresh_token está presente na resposta
+    assert "refresh_token" in response.cookies  # O cookie 'refresh_token' deve estar presente
+    refresh_token = response.cookies["refresh_token"]
+    assert refresh_token is not None  # O valor do cookie não deve ser None
+
 def test_register_user_duplicate_email(client: TestClient):
     """Testar se o registro falha quando o email já existe"""
     
@@ -43,7 +47,6 @@ def test_register_user_duplicate_email(client: TestClient):
 
     # Tentativa de registro com o mesmo email
     response = client.post("/user/register", json=user_data)
-    
     assert response.status_code == 200
     data = response.json()
     assert data["result"] == "Failed"
