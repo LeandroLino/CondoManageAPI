@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.controllers.api_controller import router
+from app.controllers.user_controller import user_router
 from app.database.connection import engine, Base
 from app.core.config import settings
 
@@ -14,6 +15,7 @@ app = FastAPI(
 
 # Incluir rotas
 app.include_router(router)
+app.include_router(user_router)
 
 if __name__ == "__main__":
     import uvicorn
