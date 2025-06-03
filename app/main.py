@@ -8,8 +8,8 @@ from app.core.config import settings
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="FastAPI + PostgreSQL Project",
-    description="Projeto simples com contador de chamadas",
+    title="CondoManage API",
+    description="MVP CondoManage API",
     version=settings.api_version,
 )
 
