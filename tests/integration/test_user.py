@@ -80,6 +80,11 @@ def test_login_user(client: TestClient, db_session):
     data = response.json()
     assert "token" in data  # O token JWT deve estar na resposta
 
+    # Verifica se o cookie refresh_token está presente na resposta
+    assert "refresh_token" in response.cookies  # O cookie 'refresh_token' deve estar presente
+    refresh_token = response.cookies["refresh_token"]
+    assert refresh_token is not None  # O valor do cookie não deve ser None
+
 def test_login_user_invalid_password(client: TestClient, db_session):
     """Testar login com senha incorreta"""
     user_data = {
