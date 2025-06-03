@@ -11,9 +11,10 @@ user_router = APIRouter(prefix="/user")
 @user_router.post("/register")
 def register_user(user: UserRegisterRequest, db: Session = Depends(get_db)):
     result = UserService.register_user(user.name, user.email, user.document_number, user.password, user.role, db)
+    print("Result: ",result)
     if "error" in result:
         return {"result": "Failed", "message": result["error"], 'token': None}
-    return {'token': result["token"]}
+    return {'token': result}
 
 @user_router.post("/login")
 def register_user(user: UserLoginRequest, db: Session = Depends(get_db)):
@@ -21,4 +22,4 @@ def register_user(user: UserLoginRequest, db: Session = Depends(get_db)):
     print(result)
     if "error" in result:
         return {"result": "Failed", "message": result["error"], 'token': None}
-    return {'token': result["token"]}
+    return {'token': result}

@@ -8,7 +8,7 @@ export TESTING=1
 # Criar ambiente virtual se não existir
 if [ ! -d "venv" ]; then
     echo "📦 Criando ambiente virtual..."
-    python -m venv venv
+    python3 -m venv venv
 fi
 
 # Ativar ambiente virtual
@@ -27,7 +27,7 @@ rm -f test.db 2>/dev/null || true
 
 # Executar testes
 echo "🚀 Executando testes..."
-TESTING=1 python -m pytest tests/ -v --tb=short
+TESTING=1 python3 -m pytest tests/ -v --tb=short
 
 echo ""
 echo "✅ Testes concluídos!"
