@@ -1,6 +1,6 @@
 import bcrypt
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from app.models.user import UserModel
 from sqlalchemy.orm import Session
 from app.core.config import settings
@@ -61,7 +61,7 @@ class UserService:
         # Gerar o token JWT
 
         # Retorna o ID do usuário registrado e o token
-        return {"token": access_token}
+        return access_token
 
     @staticmethod
     def login_user(email: str, password: str, db: Session, response: Response):
@@ -93,12 +93,12 @@ class UserService:
         )
         
         # Retorna o access token diretamente na resposta
-        return {"access_token": access_token}
+        return access_token
     
     @staticmethod
     def generate_jwt_token(user_id: int, role) -> str:
         role_value = role.value if hasattr(role, 'value') else role
-        expiration_time = datetime.utcnow() + timedelta(hours=1)  # Expiração do access token em 1 hora
+        expiration_time = datetime.now(timezone.utc) + timedelta(hours=1)  # Token com validade de 1 hora
         payload = {
             "user_id": user_id,
             "role": role_value,
@@ -110,7 +110,7 @@ class UserService:
 
     @staticmethod
     def generate_refresh_token(user_id: int) -> str:
-        expiration_time = datetime.utcnow() + timedelta(days=30)  # Expira em 30 dias
+        expiration_time = datetime.now(timezone.utc) + timedelta(days=30)  # Refresh token com validade de 30 dias
         payload = {
             "user_id": user_id,
             "exp": expiration_time

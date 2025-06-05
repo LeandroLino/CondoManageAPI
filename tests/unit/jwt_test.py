@@ -1,8 +1,7 @@
-import pytest
 import jwt
 from app.services.user_service import UserService
 from unittest.mock import patch
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 
 # Teste unitário para a função de gerar o token JWT
 def test_generate_jwt_token():
@@ -23,5 +22,4 @@ def test_generate_jwt_token():
         decoded_token = jwt.decode(token, 'secret_test_key', algorithms=["HS256"])
         assert decoded_token["user_id"] == user_id
         assert decoded_token["role"] == role
-        assert datetime.utcnow() < datetime.utcfromtimestamp(decoded_token["exp"])
-
+        assert datetime.now(timezone.utc) < datetime.fromtimestamp(decoded_token["exp"], tz=timezone.utc)
